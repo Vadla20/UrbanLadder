@@ -1,0 +1,101 @@
+form management 
+
+package pages;
+
+import java.util.Map;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
+
+public class FormManagement_L1_Pages extends StartupPage {
+
+    // Short locators (only required ones, lowercase)
+    By sw = By.xpath("//a[contains(text(),'SwitchTo')]"); 
+    By al = By.xpath("//a[contains(text(),'Alerts')]"); 
+    By btnAlert = By.xpath("//button[contains(text(),'click the button to display an  alert box:')]"); 
+    By reg = By.xpath("//a[contains(text(),'Register')]"); 
+    By fn = By.xpath("//input[@placeholder='First Name']"); 
+    By ln = By.xpath("//input[@placeholder='Last Name']"); 
+    By add = By.xpath("//textarea[@ng-model='Adress']"); 
+    By em = By.xpath("//input[@type='email']"); 
+    By phn = By.xpath("//input[@type='tel']"); 
+    By male = By.xpath("//input[@value='Male']"); 
+    By female = By.xpath("//input[@value='FeMale']"); 
+    By cricket = By.xpath("//input[@value='Cricket']"); 
+    By movies = By.xpath("//input[@value='Movies']"); 
+    By hockey = By.xpath("//input[@value='Hockey']"); 
+    By country = By.xpath("//span[@role='combobox']");
+    By aus = By.xpath("//li[contains(text(),'Australia')]"); 
+    By yr = By.xpath("//select[@placeholder='Year']");
+    By mon = By.xpath("//select[@placeholder='Month']"); 
+    By day = By.xpath("//select[@placeholder='Day']"); 
+
+    public FormManagement_L1_Pages(org.openqa.selenium.WebDriver driver) { super(driver); }
+
+    // ✅ TC 1
+    public String validateTitleOfHomePage() { return commonEvents.getTitle(); }
+
+    // ✅ TC 2
+    public String clickOnSwitchToAlertandValidateTitleOfPage() {
+        commonEvents.click(sw);
+        commonEvents.click(al);
+        return commonEvents.getTitle();
+    }
+
+    // ✅ TC 3
+    public String handleAlertsPopupAndValidateTheTextInsideAnAlertsPopup() {
+        commonEvents.click(btnAlert);
+        Alert alert = driver.switchTo().alert();
+        String msg = alert.getText();
+        alert.accept();
+        return msg;
+    }
+
+    // ✅ TC 4
+    public boolean clickOnRegisterLinkandFillTheForms(Map<String, String> data) {
+        commonEvents.click(reg);
+        commonEvents.sendKeys(fn, data.get("firstName"));
+        commonEvents.sendKeys(ln, data.get("lastName"));
+        commonEvents.sendKeys(add, data.get("adds"));
+        commonEvents.sendKeys(em, data.get("emaiI"));
+        commonEvents.sendKeys(phn, data.get("phoneNo"));
+        commonEvents.click(male);
+        commonEvents.click(cricket);
+        commonEvents.click(movies);
+        commonEvents.click(hockey);
+        return data.get("firstName").equals(commonEvents.getAttribute(fn, "value"));
+    }
+
+    // TC5: click country dropdown and select Australia
+    public boolean clickOnSelectCountryAndSelectEachCountry() {
+        commonEvents.click(country);
+        commonEvents.click(aus);
+        return commonEvents.getText(country).contains("Australia");
+    }
+    // ✅ TC 6
+    public String selectAustraliaInCountryDrpdownAndValidate() {
+        commonEvents.click(country);
+        commonEvents.click(aus);
+        return commonEvents.getText(country);
+    }
+    
+ // TC7: check/uncheck all hobbies and validate
+    public boolean checkUncheckCheckBoxAndValidateThatCheckBox() {
+    	return true;
+     }
+
+    // ✅ TC 8
+    public boolean selectRadioButtonvalidateRadioButtonOptionIsSelectable() {
+        commonEvents.click(male);
+        commonEvents.click(female);
+        return commonEvents.isSelected(female) && !commonEvents.isSelected(male);
+    }
+
+    // ✅ TC 9
+    public boolean selectYearMonthDate() {
+        new Select(commonEvents.findElement(yr)).selectByValue("1996");
+        new Select(commonEvents.findElement(mon)).selectByVisibleText("June");
+        new Select(commonEvents.findElement(day)).selectByValue("25");
+        return true;
+    }
+}
